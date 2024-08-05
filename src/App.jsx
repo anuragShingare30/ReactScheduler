@@ -7,13 +7,17 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, createEventId } from './event-utils';
 
 export default function DemoApp() {
+  // State to manage the visibility of weekends
   const [weekendsVisible, setWeekendsVisible] = useState(true);
+  // State to manage the current events in the calendar
   const [currentEvents, setCurrentEvents] = useState([]);
 
+  // Function to toggle the visibility of weekends
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
 
+  // Function to generate a random color in hex format
   function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -23,11 +27,12 @@ export default function DemoApp() {
     return color;
   }
 
+  // Function to handle date selection and add a new event
   function handleDateSelect(selectInfo) {
     let title = prompt('Please enter a new title for your event');
     let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
+    calendarApi.unselect(); // Clear date selection
 
     if (title) {
       calendarApi.addEvent({
@@ -35,18 +40,19 @@ export default function DemoApp() {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        backgroundColor: getRandomColor(), // Add random color
-         // Optional: Add random border color
+        backgroundColor: getRandomColor(), // Add random background color
       });
     }
   }
 
+  // Function to handle event click and remove the event after confirmation
   function handleEventClick(clickInfo) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
       clickInfo.event.remove();
     }
   }
 
+  // Function to handle changes in events (initialized/added/changed/removed)
   function handleEvents(events) {
     setCurrentEvents(events);
   }
@@ -72,12 +78,12 @@ export default function DemoApp() {
           selectMirror={true}
           dayMaxEvents={true}
           weekends={weekendsVisible}
-          initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+          initialEvents={INITIAL_EVENTS} // Alternatively, use the `events` setting to fetch from a feed
           select={handleDateSelect}
-          eventContent={renderEventContent} // custom render function
+          eventContent={renderEventContent} // Custom render function for events
           eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          /* you can update a remote database when these fire:
+          eventsSet={handleEvents} // Called after events are initialized/added/changed/removed
+          /* You can update a remote database when these fire:
           eventAdd={function(){}}
           eventChange={function(){}}
           eventRemove={function(){}}
@@ -88,15 +94,17 @@ export default function DemoApp() {
   );
 }
 
+// Function to render custom content for events
 function renderEventContent(eventInfo) {
   return (
-    <div style={{padding:"10px"}}>
+    <div style={{ padding: "10px" }}>
       <b>{eventInfo.timeText}</b>
-      <i style={{ color: 'white'}}>{eventInfo.event.title}</i>
+      <i style={{ color: 'white' }}>{eventInfo.event.title}</i>
     </div>
   );
 }
 
+// Sidebar component to manage weekend toggle and display current events
 function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
   return (
     <div className='demo-app-sidebar'>
@@ -122,6 +130,7 @@ function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
   );
 }
 
+// Function to render individual events in the sidebar
 function SidebarEvent({ event }) {
   return (
     <li key={event.id}>
