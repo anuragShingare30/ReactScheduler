@@ -6,9 +6,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, createEventId } from './event-utils';
 
-export default function DemoApp() {
+export default function App(){
   // State to manage the visibility of weekends
-  const [weekendsVisible, setWeekendsVisible] = useState(true);
+  const [weekendsVisible, setWeekendsVisible] = useState(true); 
   // State to manage the current events in the calendar
   const [currentEvents, setCurrentEvents] = useState([]);
 
